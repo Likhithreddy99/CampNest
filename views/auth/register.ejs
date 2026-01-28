@@ -1,0 +1,25 @@
+<section class="cn-section">
+  <div class="cn-section-header">
+    <h2>Create your CampNest account</h2>
+  </div>
+
+  <form class="cn-form" action="/auth/register" method="POST">
+    <label class="cn-label">Username</label>
+    <input class="cn-input" name="username" type="text" placeholder="trailblazer" required />
+
+    <label class="cn-label">Email</label>
+    <input class="cn-input" name="email" type="email" placeholder="you@example.com" required />
+
+    <label class="cn-label">Password</label>
+    <input class="cn-input" name="password" type="password" placeholder="min 6 chars" required />
+
+    <label class="cn-label">Confirm password</label>
+    <input class="cn-input" name="password2" type="password" placeholder="repeat password" required />
+
+    <button class="cn-btn cn-btn-primary" type="submit">Create account</button>
+    <p class="cn-empty" style="margin-top:1rem;">
+      Already have an account? <a href="/auth/login" style="text-decoration:underline;">Login</a>
+    </p>
+  </form>
+</section>
+

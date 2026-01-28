@@ -1,0 +1,42 @@
+<section class="cn-section">
+    <div class="cn-section-header">
+      <h2>Edit Campsite</h2>
+      <a href="/camps/<%= camp._id %>">Back</a>
+    </div>
+  
+    <div class="cn-card">
+      <div class="cn-card-body">
+        <form
+          class="cn-form"
+          action="/camps/<%= camp._id %>?_method=PUT"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <label class="cn-label">Title</label>
+          <input class="cn-input" name="title" value="<%= camp.title %>" required />
+  
+          <label class="cn-label">Location</label>
+          <input class="cn-input" name="location" value="<%= camp.location %>" required />
+  
+          <label class="cn-label">Description</label>
+          <textarea class="cn-textarea" name="description" required><%= camp.description %></textarea>
+  
+          <label class="cn-label">Price (per night)</label>
+          <input class="cn-input" name="price" type="number" value="<%= camp.price %>" />
+  
+          <label class="cn-label">Change image (upload)</label>
+          <input type="file" name="imageFile" />
+  
+          <% if (camp.imageUrl) { %>
+            <p class="cn-card-meta">Current image:</p>
+            <img src="<%= camp.imageUrl %>" style="max-width:100%;border-radius:6px;margin-bottom:0.5rem;" />
+          <% } %>
+  
+          <div style="margin-top:1rem;">
+            <button class="cn-btn cn-btn-primary">Update Campsite</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  

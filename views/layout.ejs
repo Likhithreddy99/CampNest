@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%= title || 'CampNest' %></title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/chatbot.css" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- ================= HEADER ================= -->
+    <header class="cn-header">
+      <div class="cn-container cn-header-inner">
+
+        <!-- LOGO -->
+        <a href="/" class="cn-logo" aria-label="CampNest home">
+          <span class="cn-logo-mark" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3l8.5 15H3.5L12 3z"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8.5 18l3.5-6 3.5 6"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                opacity="0.85"
+              />
+            </svg>
+          </span>
+          <span class="cn-logo-text">CampNest</span>
+        </a>
+
+        <!-- NAV -->
+        <nav class="cn-nav">
+          <a href="/" class="cn-nav-link">Home</a>
+          <a href="/camps" class="cn-nav-link">Campsites</a>
+          <a href="/stories" class="cn-nav-link">Stories</a>
+
+          <form action="/search" method="GET" class="cn-nav-search">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search camps..."
+              aria-label="Search camps"
+            />
+          </form>
+
+          <% if (!currentUser) { %>
+            <a href="/auth/login" class="cn-btn cn-btn-ghost">Login</a>
+            <a href="/auth/register" class="cn-btn cn-btn-primary">Join</a>
+          <% } else { %>
+
+            <div class="cn-dropdown">
+              <button type="button" class="cn-btn cn-btn-ghost">
+                Post ▾
+              </button>
+              <div class="cn-dropdown-menu">
+                <a href="/camps/new">New Campsite</a>
+                <a href="/stories/new">New Story</a>
+              </div>
+            </div>
+
+            <div class="cn-dropdown">
+              <button type="button" class="cn-user-chip">
+                <span class="cn-avatar">
+                  <%= (currentUser.username || currentUser.email)[0].toUpperCase() %>
+                </span>
+                <span><%= currentUser.username %></span>
+                ▾
+              </button>
+
+              <div class="cn-dropdown-menu">
+                <a href="/profile">My Profile</a>
+                <a href="/camps?mine=true">My Camps</a>
+                <a href="/stories?mine=true">My Stories</a>
+                <a href="/auth/logout">Logout</a>
+              </div>
+            </div>
+
+          <% } %>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main class="cn-main">
+      <div class="cn-container">
+
+        <% if (success_msg && success_msg.length) { %>
+          <div class="cn-alert cn-alert-success"><%= success_msg %></div>
+        <% } %>
+
+        <% if (error_msg && error_msg.length) { %>
+          <div class="cn-alert cn-alert-error"><%= error_msg %></div>
+        <% } %>
+
+        <% if (error && error.length) { %>
+          <div class="cn-alert cn-alert-error"><%= error %></div>
+        <% } %>
+
+        <%- include(view) %>
+      </div>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="cn-footer">
+      <div class="cn-container">
+        <p>
+          &copy; <%= new Date().getFullYear() %> CampNest.
+          Built for campers, trekkers & storytellers.
+        </p>
+      </div>
+    </footer>
+
+    <!-- ================= AI CHATBOT ================= -->
+    <div class="cn-chatbot" id="cnChatbot">
+      <div class="cn-chatbot-header">🤖 CampNest AI</div>
+
+      <div class="cn-chatbot-body" id="chatBody">
+        <div class="cn-chatbot-msg bot">
+          Hi 👋 Ask me about best camps, safety, or places near you.
+        </div>
+      </div>
+
+      <div class="cn-chatbot-input">
+        <input
+          id="chatInput"
+          type="text"
+          placeholder="Ask CampNest AI..."
+          onkeydown="if(event.key==='Enter') sendMessage()"
+        />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- ================= SCRIPTS ================= -->
+    <script>
+      function sendMessage() {
+        const input = document.getElementById("chatInput");
+        const body = document.getElementById("chatBody");
+        const msg = input.value.trim();
+        if (!msg) return;
+
+        body.innerHTML += `<div class="cn-chatbot-msg user">${msg}</div>`;
+        input.value = "";
+
+        fetch("/chatbot", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg })
+        })
+        .then(res => res.json())
+        .then(data => {
+          body.innerHTML += `<div class="cn-chatbot-msg bot">${data.reply}</div>`;
+          body.scrollTop = body.scrollHeight;
+        });
+      }
+    </script>
+
+    <script src="/js/main.js"></script>
+  </body>
+</html>

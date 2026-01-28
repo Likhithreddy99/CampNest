@@ -1,0 +1,3 @@
+.cn-dropdown.open .cn-dropdown-menu {
+  display: block;
+}

@@ -1,0 +1,39 @@
+<div class="cn-chatbot">
+  <div class="cn-chatbot-header">
+    🤖 CampNest AI Assistant
+  </div>
+
+  <div class="cn-chatbot-body" id="chatBody">
+    <div class="cn-chatbot-msg bot">
+      Hi 👋 Ask me about best camps, safety, or places near you.
+    </div>
+  </div>
+
+  <div class="cn-chatbot-input">
+    <input id="chatInput" placeholder="Ask something..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const body = document.getElementById("chatBody");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  body.innerHTML += `<div class="cn-chatbot-msg user">${msg}</div>`;
+  input.value = "";
+
+  fetch("/chatbot", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  })
+  .then(res => res.json())
+  .then(data => {
+    body.innerHTML += `<div class="cn-chatbot-msg bot">${data.reply}</div>`;
+    body.scrollTop = body.scrollHeight;
+  });
+}
+</script>

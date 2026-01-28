@@ -1,0 +1,28 @@
+<section class="cn-section">
+  <div class="cn-section-header">
+    <h2><%= story.title %></h2>
+    <a href="/stories">Back</a>
+  </div>
+  <% if (
+  currentUser &&
+  (currentUser.role === 'admin' ||
+   String(story.author?._id) === String(currentUser._id))
+) { %>
+  <a href="/stories/<%= story._id %>/edit" class="cn-btn cn-btn-ghost">Edit</a>
+<% } %>
+
+
+  <div class="cn-card" style="overflow:hidden;">
+    <% if (story.coverImageUrl) { %>
+      <div class="cn-card-image" style="height:260px;background-image:url('<%= story.coverImageUrl %>')"></div>
+    <% } %>
+    <div class="cn-card-body">
+      <p class="cn-card-meta">by <%= story.author?.username || "unknown" %> · <%= story.createdAt.toLocaleString() %></p>
+      <div class="cn-story-content">
+        <%= story.content %>
+      </div>
+      
+    </div>
+  </div>
+</section>
+

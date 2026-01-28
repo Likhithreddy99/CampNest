@@ -1,0 +1,61 @@
+<section class="cn-section">
+    <h2>Search results for "<%= query %>"</h2>
+  
+    <!-- CAMPS -->
+    <section class="cn-section">
+      <h3>Campsites</h3>
+  
+      <% if (camps && camps.length) { %>
+        <div class="cn-grid">
+          <% camps.forEach(camp => { %>
+            <article class="cn-card">
+              <div
+                class="cn-card-image"
+                style="background-image:url('<%= camp.imageUrl %>')"
+              ></div>
+              <div class="cn-card-body">
+                <h3>
+                  <a href="/camps/<%= camp._id %>"><%= camp.title %></a>
+                </h3>
+                <p class="cn-card-location"><%= camp.location %></p>
+                <p class="cn-card-rating">
+                  <%= camp.averageRating ? camp.averageRating.toFixed(1) : '0.0' %> ★
+                </p>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="cn-empty">No camps found.</p>
+      <% } %>
+    </section>
+  
+    <!-- STORIES -->
+    <section class="cn-section">
+      <h3>Stories</h3>
+  
+      <% if (stories && stories.length) { %>
+        <div class="cn-grid cn-grid-stories">
+          <% stories.forEach(story => { %>
+            <article class="cn-card cn-card-story">
+              <div class="cn-card-body">
+                <h3>
+                  <a href="/stories/<%= story._id %>"><%= story.title %></a>
+                </h3>
+                <p class="cn-card-meta">
+                  by <%= story.author?.username || 'unknown' %> ·
+                  <%= story.createdAt.toLocaleDateString() %>
+                </p>
+                <p class="cn-card-snippet">
+                  <%= story.content.slice(0, 140) %>...
+                </p>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="cn-empty">No stories found.</p>
+      <% } %>
+    </section>
+  </section>
+  

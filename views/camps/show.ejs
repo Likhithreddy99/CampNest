@@ -1,0 +1,87 @@
+<section class="cn-section">
+  <div class="cn-section-header">
+    <h2><%= camp.title %></h2>
+    <a href="/camps">Back</a>
+  </div>
+
+  <div class="cn-card" style="overflow:hidden;">
+    <div class="cn-card-image" style="height:260px;<%= camp.imageUrl ? `background-image:url('${camp.imageUrl}')` : '' %>"></div>
+    <div class="cn-card-body">
+      <p class="cn-card-location"><%= camp.location %></p>
+      <p class="cn-card-rating"><%= (camp.averageRating || 0).toFixed(1) %> ★</p>
+      <p class="cn-card-meta">posted by <%= camp.author?.username || "unknown" %></p>
+      <p style="color:#1f2937;line-height:1.6;"><%= camp.description %></p>
+      <% if (
+        currentUser &&
+        (currentUser.role === 'admin' ||
+         String(camp.author?._id) === String(currentUser._id))
+      ) { %>
+        <a href="/camps/<%= camp._id %>/edit" class="cn-btn cn-btn-ghost">Edit</a>
+      <% } %>
+      
+      <% if (camp.nearbyStays && camp.nearbyStays.length) { %>
+        <div style="margin-top:1rem;">
+          <h3 style="margin:0 0 0.5rem;font-size:1rem;">Nearby stays</h3>
+          <div style="display:grid; gap:0.6rem;">
+            <% camp.nearbyStays.forEach(s => { %>
+              <div style="padding:0.75rem;border-radius:0.9rem;border:1px solid rgba(120,113,108,0.22);background:rgba(255,255,255,0.7);">
+                <div style="display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;">
+                  <div>
+                    <strong><%= s.name %></strong>
+                    <div class="cn-card-meta" style="margin:0.25rem 0 0;"><%= s.type %> · <%= (s.distanceKm || 0).toFixed(1) %> km away</div>
+                  </div>
+                  <% if (s.priceRange) { %>
+                    <div class="cn-card-meta" style="margin:0;white-space:nowrap;"><%= s.priceRange %></div>
+                  <% } %>
+                </div>
+                <% if (s.link) { %>
+                  <div style="margin-top:0.35rem;">
+                    <a href="<%= s.link %>" target="_blank" rel="noreferrer" style="text-decoration:underline;">View</a>
+                  </div>
+                <% } %>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="cn-section">
+  <div class="cn-section-header">
+    <h2>Reviews</h2>
+  </div>
+
+  <% if (currentUser) { %>
+    <form class="cn-form" action="/camps/<%= camp._id %>/reviews" method="POST">
+      <label class="cn-label">Rating (1 to 5)</label>
+      <input class="cn-input" name="rating" type="number" min="1" max="5" step="1" required />
+
+      <label class="cn-label">Comment</label>
+      <textarea class="cn-textarea" name="comment" placeholder="Share what you loved (or didn’t)..." required></textarea>
+
+      <button class="cn-btn cn-btn-primary" type="submit">Post review</button>
+    </form>
+  <% } else { %>
+    <p class="cn-empty"><a href="/auth/login" style="text-decoration:underline;">Login</a> to add a review.</p>
+  <% } %>
+
+  <div style="margin-top:1rem; display:grid; gap:0.75rem;">
+    <% if (reviews && reviews.length) { %>
+      <% reviews.forEach(r => { %>
+        <div class="cn-card" style="padding:0.9rem 1rem;">
+          <div style="display:flex;justify-content:space-between;gap:1rem;align-items:center;">
+            <strong><%= r.author?.username || "anonymous" %></strong>
+            <span class="cn-card-rating"><%= r.rating %> ★</span>
+          </div>
+          <p style="margin:0.4rem 0 0;color:#d1d5db;"><%= r.comment %></p>
+          <p class="cn-card-meta" style="margin:0.45rem 0 0;"><%= r.createdAt.toLocaleString() %></p>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="cn-empty">No reviews yet.</p>
+    <% } %>
+  </div>
+</section>
+

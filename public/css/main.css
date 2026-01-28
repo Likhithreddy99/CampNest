@@ -1,0 +1,304 @@
+/* ================= RESET ================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
+  background: #faf7f7;
+  color: #2d2e2f;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ================= CONTAINER ================= */
+
+.cn-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ================= HEADER ================= */
+
+.cn-header {
+  background: #ffffff;
+  border-bottom: 1px solid #eddede;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.cn-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+/* ================= LOGO ================= */
+
+.cn-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #d32323;
+}
+
+.cn-logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ================= NAV ================= */
+
+.cn-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cn-nav-link {
+  font-size: 0.9rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+}
+
+.cn-nav-link:hover {
+  background: rgba(211, 35, 35, 0.08);
+}
+
+/* ================= SEARCH ================= */
+
+.cn-nav-search input {
+  height: 32px;
+  padding: 0 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #d8cfcf;
+  font-size: 0.85rem;
+}
+
+.cn-nav-search input:focus {
+  outline: none;
+  border-color: #d32323;
+}
+
+/* ================= BUTTONS ================= */
+
+.cn-btn {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.cn-btn-primary {
+  background: #d32323;
+  color: #ffffff;
+}
+
+.cn-btn-primary:hover {
+  background: #b91d1d;
+}
+
+.cn-btn-ghost {
+  background: #ffffff;
+  border: 1px solid #d8cfcf;
+}
+
+/* ================= USER ================= */
+
+.cn-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #fdf3f3;
+  border: 1px solid #eddede;
+  font-size: 0.8rem;
+}
+
+.cn-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #d32323;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ================= MAIN ================= */
+
+.cn-main {
+  padding: 1.5rem 0 3rem;
+}
+
+/* ================= HERO ================= */
+
+.cn-hero {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 2rem;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: linear-gradient(
+    180deg,
+    rgba(211, 35, 35, 0.06),
+    rgba(211, 35, 35, 0)
+  );
+  border-radius: 12px;
+}
+
+.cn-hero-text h1 {
+  font-size: 2.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.cn-hero-text p {
+  font-size: 0.95rem;
+  color: #5f5f61;
+  max-width: 520px;
+}
+
+/* ================= SECTIONS ================= */
+
+.cn-section {
+  margin-top: 2.5rem;
+  padding: 1.2rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.cn-section-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.cn-section-header h2 {
+  font-size: 1.3rem;
+}
+
+/* ================= GRID ================= */
+
+.cn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+/* ================= CARDS ================= */
+
+.cn-card {
+  border: 1px solid #eddede;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cn-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.cn-card-image {
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+  background-color: #f5eeee;
+}
+
+.cn-card-body {
+  padding: 0.9rem;
+}
+
+.cn-card h3 {
+  font-size: 1rem;
+}
+
+.cn-card-location {
+  font-size: 0.85rem;
+  color: #6e7072;
+}
+
+.cn-card-rating {
+  font-size: 0.85rem;
+  color: #d32323;
+  font-weight: 600;
+}
+
+/* ================= FORMS ================= */
+
+.cn-form {
+  max-width: 520px;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #eddede;
+  background: #ffffff;
+}
+
+.cn-input,
+.cn-textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #d8cfcf;
+}
+
+/* ================= ALERTS ================= */
+
+.cn-alert {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.cn-alert-success {
+  background: #eef7f1;
+  border: 1px solid #34a853;
+  color: #137333;
+}
+
+.cn-alert-error {
+  background: #fceeee;
+  border: 1px solid #d93025;
+  color: #a50e0e;
+}
+
+/* ================= FOOTER ================= */
+
+.cn-footer {
+  border-top: 1px solid #eddede;
+  padding: 1rem 0;
+  font-size: 0.8rem;
+  color: #6e7072;
+  margin-top: 3rem;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  .cn-hero {
+    grid-template-columns: 1fr;
+  }
+}

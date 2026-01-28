@@ -1,0 +1,11 @@
+<h2>AI Recommended Camps for You</h2>
+
+<% recommendations.forEach(r => { %>
+  <div class="camp-card">
+    <h3><%= r.camp.title %></h3>
+    <p><%= r.camp.location %></p>
+    <p>⭐ <%= r.camp.averageRating %></p>
+    <p>Tags: <%= r.camp.tags.join(", ") %></p>
+    <small>AI Match Score: <%= (r.score * 100).toFixed(0) %>%</small>
+  </div>
+<% }) %>

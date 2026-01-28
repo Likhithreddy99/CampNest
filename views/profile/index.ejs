@@ -1,0 +1,38 @@
+<section class="cn-section">
+    <h2>My Profile</h2>
+  
+    <p class="cn-card-meta">
+      Logged in as <strong><%= currentUser.username %></strong>
+    </p>
+  
+    <div class="cn-section">
+      <h3>My Campsites</h3>
+      <% if (camps.length) { %>
+        <ul>
+          <% camps.forEach(camp => { %>
+            <li>
+              <a href="/camps/<%= camp._id %>"><%= camp.title %></a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="cn-empty">No camps yet.</p>
+      <% } %>
+    </div>
+  
+    <div class="cn-section">
+      <h3>My Stories</h3>
+      <% if (stories.length) { %>
+        <ul>
+          <% stories.forEach(story => { %>
+            <li>
+              <a href="/stories/<%= story._id %>"><%= story.title %></a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="cn-empty">No stories yet.</p>
+      <% } %>
+    </div>
+  </section>
+  

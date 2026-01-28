@@ -1,0 +1,29 @@
+<section class="cn-section">
+  <div class="cn-section-header">
+    <h2>Campsites</h2>
+    <% if (currentUser) { %>
+      <a href="/camps/new">Post a campsite</a>
+    <% } else { %>
+      <a href="/auth/login">Login to post</a>
+    <% } %>
+  </div>
+
+  <div class="cn-grid">
+    <% if (camps && camps.length) { %>
+      <% camps.forEach(camp => { %>
+        <article class="cn-card">
+          <div class="cn-card-image" style="<%= camp.imageUrl ? `background-image:url('${camp.imageUrl}')` : '' %>"></div>
+          <div class="cn-card-body">
+            <h3><a href="/camps/<%= camp._id %>"><%= camp.title %></a></h3>
+            <p class="cn-card-location"><%= camp.location %></p>
+            <p class="cn-card-meta">by <%= camp.author?.username || "unknown" %></p>
+            <p class="cn-card-rating"><%= (camp.averageRating || 0).toFixed(1) %> ★</p>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <p class="cn-empty">No campsites yet.</p>
+    <% } %>
+  </div>
+</section>
+

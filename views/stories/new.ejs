@@ -1,0 +1,26 @@
+<section class="cn-section">
+  <div class="cn-section-header">
+    <h2>Write a story</h2>
+    <a href="/stories">Back</a>
+  </div>
+
+  <form class="cn-form" action="/stories" method="POST" enctype="multipart/form-data">
+    <label class="cn-label">Title</label>
+    <input class="cn-input" name="title" type="text" placeholder="A night under the Milky Way" required />
+
+    <label class="cn-label">Upload cover image (optional)</label>
+    <input class="cn-input" name="coverImageFile" type="file" accept="image/*" />
+
+    <label class="cn-label">...or Cover image URL (optional)</label>
+    <input class="cn-input" name="coverImageUrl" type="url" placeholder="https://..." />
+
+    <label class="cn-label">Tags (comma separated)</label>
+    <input class="cn-input" name="tags" type="text" placeholder="solo, mountains, stargazing" />
+
+    <label class="cn-label">Story</label>
+    <textarea class="cn-textarea" name="content" placeholder="Tell your campfire tale..." required></textarea>
+
+    <button class="cn-btn cn-btn-primary" type="submit">Publish</button>
+  </form>
+</section>
+
