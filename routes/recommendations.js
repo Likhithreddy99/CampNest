@@ -1,20 +1,20 @@
 const express = require("express");
-const Camp = require("../models/Camp");
-const recommendCamps = require("../utils/recommendCamps");
+const campService = require("../services/camp.service");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  // Mock user profile (judges LOVE this explanation)
-  const userProfile = {
-    location: "Karnataka",
-    interests: ["forest", "trekking", "river"]
-  };
+  try {
+    const userProfile = {
+      location: "Karnataka",
+      interests: ["forest", "trekking", "river"]
+    };
 
-  const camps = await Camp.find({});
-  const recommendations = recommendCamps(userProfile, camps);
-
-  res.render("recommendations", { recommendations });
+    const recommendations = await campService.getRecommendations(userProfile);
+    res.json(recommendations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;

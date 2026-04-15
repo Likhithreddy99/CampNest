@@ -1,11 +1,12 @@
 module.exports.ensureAuth = (req, res, next) => {
   if (req.isAuthenticated && req.isAuthenticated()) return next();
-  req.flash('error_msg', 'Please log in to continue.');
-  return res.redirect('/auth/login');
+  return res.status(401).json({ error: 'Please log in to continue.' });
 };
 
 module.exports.ensureGuest = (req, res, next) => {
-  if (req.isAuthenticated && req.isAuthenticated()) return res.redirect('/');
+  if (req.isAuthenticated && req.isAuthenticated()) {
+    return res.status(403).json({ error: 'You are already logged in.' });
+  }
   return next();
 };
 
@@ -13,19 +14,20 @@ module.exports.ensureOwnerOrAdmin = (getResourceAuthorId) => {
   return async (req, res, next) => {
     try {
       if (!req.user) {
-        req.flash('error_msg', 'Please log in to continue.');
-        return res.redirect('/auth/login');
+        return res.status(401).json({ error: 'Please log in to continue.' });
       }
       if (req.user.role === 'admin') return next();
 
       const authorId = await getResourceAuthorId(req);
       if (!authorId) {
-        req.flash('error_msg', 'Resource not found.');
-        return res.redirect('back');
+        return res.status(404).json({ error: 'Resource not found.' });
       }
-      if (String(authorId) !== String(req.user._id)) {
-        req.flash('error_msg', 'You are not allowed to do that.');
-        return res.redirect('back');
+      
+      const resourceId = String(authorId);
+      const userId = String(req.user.id);
+
+      if (resourceId !== userId) {
+        return res.status(403).json({ error: 'You are not allowed to do that.' });
       }
       return next();
     } catch (err) {
@@ -33,4 +35,3 @@ module.exports.ensureOwnerOrAdmin = (getResourceAuthorId) => {
     }
   };
 };
-

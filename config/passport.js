@@ -1,12 +1,12 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
+const { User } = require('../models');
 
 module.exports = function (passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
       try {
-        const user = await User.findOne({ email: email.toLowerCase() });
+        const user = await User.findOne({ where: { email: email.toLowerCase() } });
         if (!user) {
           return done(null, false, { message: 'No account found with that email' });
         }
@@ -29,11 +29,10 @@ module.exports = function (passport) {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await User.findById(id);
+      const user = await User.findByPk(id);
       done(null, user);
     } catch (err) {
       done(err, null);
     }
   });
 };
-

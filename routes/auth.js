@@ -1,77 +1,59 @@
 const express = require('express');
 const passport = require('passport');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const { ensureGuest } = require('../middleware/auth');
+const authService = require('../services/auth.service');
 
 const router = express.Router();
 
-router.get('/login', ensureGuest, (req, res) => {
-  res.render('layout', { title: 'Login - CampNest', view: 'auth/login' });
+router.get('/user', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json(req.user);
+  } else {
+    res.json(null);
+  }
 });
 
-router.post(
-  '/login',
-  ensureGuest,
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/auth/login',
-    failureFlash: true,
-  })
-);
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.status(401).json({ message: info.message || 'Login failed' });
 
-router.get('/register', ensureGuest, (req, res) => {
-  res.render('layout', { title: 'Create account - CampNest', view: 'auth/register' });
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.json({ message: 'Success', user });
+    });
+  })(req, res, next);
 });
 
-router.post('/register', ensureGuest, async (req, res) => {
+router.post('/register', async (req, res) => {
   const { username, email, password, password2 } = req.body;
 
   if (!username || !email || !password || !password2) {
-    req.flash('error_msg', 'Please fill all fields.');
-    return res.redirect('/auth/register');
+    return res.status(400).json({ message: 'Please fill all fields' });
   }
   if (password !== password2) {
-    req.flash('error_msg', 'Passwords do not match.');
-    return res.redirect('/auth/register');
+    return res.status(400).json({ message: 'Passwords do not match' });
   }
   if (password.length < 6) {
-    req.flash('error_msg', 'Password should be at least 6 characters.');
-    return res.redirect('/auth/register');
+    return res.status(400).json({ message: 'Password should be at least 6 characters' });
   }
 
-  const existing = await User.findOne({ email: email.toLowerCase() });
-  if (existing) {
-    req.flash('error_msg', 'Email is already registered.');
-    return res.redirect('/auth/register');
+  try {
+    const user = await authService.registerUser({ username, email, password });
+    
+    req.login(user, (err) => {
+      if (err) return res.status(500).json({ message: 'Account created, but login failed.' });
+      return res.json({ message: 'Success', user });
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
-
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt);
-
-  const user = await User.create({
-    username: username.trim(),
-    email: email.toLowerCase().trim(),
-    password: hash,
-  });
-
-  req.login(user, (err) => {
-    if (err) {
-      req.flash('error_msg', 'Account created, but login failed. Please login.');
-      return res.redirect('/auth/login');
-    }
-    req.flash('success_msg', 'Welcome to CampNest!');
-    return res.redirect('/');
-  });
 });
 
-router.get('/logout', (req, res, next) => {
+router.post('/logout', (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
-    req.flash('success_msg', 'You are logged out.');
-    res.redirect('/');
+    res.json({ message: 'Logged out' });
   });
 });
 
 module.exports = router;
-

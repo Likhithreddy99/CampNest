@@ -1,6 +1,6 @@
 const express = require('express');
-const Camp = require('../models/Camp');
-const Story = require('../models/Story');
+const campService = require('../services/camp.service');
+const storyService = require('../services/story.service');
 
 const router = express.Router();
 
@@ -8,39 +8,23 @@ router.get('/', async (req, res) => {
   const q = (req.query.q || '').trim();
 
   if (!q) {
-    return res.redirect('/');
+    return res.status(400).json({ error: 'Search query is required' });
   }
-
-  let camps = [];
-  let stories = [];
 
   try {
-    camps = await Camp.find({
-      $or: [
-        { title: { $regex: q, $options: 'i' } },
-        { location: { $regex: q, $options: 'i' } },
-        { tags: { $regex: q, $options: 'i' } },
-      ],
+    const [camps, stories] = await Promise.all([
+      campService.searchCamps(q),
+      storyService.searchStories(q)
+    ]);
+
+    res.json({
+      query: q,
+      camps,
+      stories,
     });
-
-    stories = await Story.find({
-      $or: [
-        { title: { $regex: q, $options: 'i' } },
-        { content: { $regex: q, $options: 'i' } },
-        { tags: { $regex: q, $options: 'i' } },
-      ],
-    }).populate('author');
   } catch (err) {
-    console.error('Search error:', err);
+    res.status(500).json({ error: err.message });
   }
-
-  res.render('layout', {
-    title: `Search: ${q} - CampNest`,
-    view: 'search/results',
-    query: q,
-    camps,          // ALWAYS defined
-    stories,        // ALWAYS defined
-  });
 });
 
 module.exports = router;

@@ -1,36 +1,30 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const StorySchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-      maxlength: 140,
-    },
-    content: {
-      type: String,
-      required: true,
-      maxlength: 20000,
-    },
-    coverImageUrl: {
-      type: String,
-      default: '',
-    },
-    tags: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
+const Story = sequelize.define('Story', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
   },
-  { timestamps: true }
-);
+  title: {
+    type: DataTypes.STRING(140),
+    allowNull: false
+  },
+  content: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  coverImageUrl: {
+    type: DataTypes.STRING,
+    defaultValue: ''
+  },
+  tags: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: []
+  }
+}, {
+  timestamps: true
+});
 
-module.exports = mongoose.model('Story', StorySchema);
-
+module.exports = Story;

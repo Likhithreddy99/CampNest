@@ -1,56 +1,46 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const CampSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    location: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    imageUrl: {
-      type: String,
-      default: '',
-    },
-    tags: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
-    nearbyStays: [
-      {
-        name: { type: String, trim: true, required: true },
-        type: { type: String, trim: true, default: 'Hotel' }, // Hotel / Homestay / Resort
-        distanceKm: { type: Number, default: 0, min: 0 },
-        priceRange: { type: String, trim: true, default: '' }, // e.g. "₹1,500–₹3,000"
-        link: { type: String, trim: true, default: '' },
-      },
-    ],
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    averageRating: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 5,
-    },
+const Camp = sequelize.define('Camp', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
   },
-  {
-    timestamps: true,
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  imageUrl: {
+    type: DataTypes.STRING,
+    defaultValue: ''
+  },
+  tags: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: []
+  },
+  nearbyStays: {
+    type: DataTypes.JSONB,
+    defaultValue: []
+  },
+  averageRating: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
+    validate: {
+      min: 0,
+      max: 5
+    }
   }
-);
+}, {
+  timestamps: true
+});
 
-module.exports = mongoose.model('Camp', CampSchema);
-
+module.exports = Camp;

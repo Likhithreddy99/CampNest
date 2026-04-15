@@ -1,20 +1,22 @@
 const express = require('express');
 const { ensureAuth } = require('../middleware/auth');
-const Camp = require('../models/Camp');
-const Story = require('../models/Story');
+const campService = require('../services/camp.service');
+const storyService = require('../services/story.service');
 
 const router = express.Router();
 
 router.get('/', ensureAuth, async (req, res) => {
-  const camps = await Camp.find({ author: req.user._id });
-  const stories = await Story.find({ author: req.user._id });
+  try {
+    const camps = await campService.getCampsByUser(req.user._id);
+    const stories = await storyService.getStoriesByUser(req.user._id);
 
-  res.render('layout', {
-    title: 'My Profile - CampNest',
-    view: 'profile/index',
-    camps,
-    stories,
-  });
+    res.json({
+      camps,
+      stories,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;

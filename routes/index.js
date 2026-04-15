@@ -1,19 +1,21 @@
 const express = require('express');
-const Camp = require('../models/Camp');
-const Story = require('../models/Story');
+const campService = require('../services/camp.service');
+const storyService = require('../services/story.service');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const trendingCamps = await Camp.find({}).sort({ averageRating: -1, createdAt: -1 }).limit(6);
-  const latestStories = await Story.find({}).populate('author').sort({ createdAt: -1 }).limit(6);
-  res.render('layout', {
-    title: 'CampNest',
-    view: 'index',
-    trendingCamps,
-    latestStories,
-  });
+  try {
+    const trendingCamps = await campService.getTrendingCamps(6);
+    const latestStories = await storyService.getLatestStories(6);
+    
+    res.json({
+      trendingCamps,
+      latestStories,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
-
