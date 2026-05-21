@@ -1,6 +1,6 @@
 # CampNest
 
-CampNest is a full-stack web app built with **Node.js, Express, Passport (local auth), and MongoDB (Mongoose)**.
+CampNest is a full-stack web app that Helps campers navigating around country with various campsites,reviews,ratings etc..It is built with **Node.js, Express, Passport (local auth), and MongoDB (Mongoose)**.
 It includes:
 
 - Campsites: post and browse campsites, add reviews + ratings
